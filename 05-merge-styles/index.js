@@ -14,31 +14,47 @@ let SrcDir = `${path.join(__dirname, 'styles')}`;
 fs.promises.rmdir(`${targetDir}/bundle.css`, {recursive: true});
 
 setTimeout(() => {
-    fs.readdir(`${SrcDir}`, (err, files) => {
-        if (err) {
-            return console.log(err);
-        }
-        // console.log(files)
+    let fileArr = [];
+    const p = new Promise ((resolve, reject) => {
+        fs.readdir(`${SrcDir}`, (err, files) => {
+            if (err) {
+                return console.log(err);
+            }
+            console.log(files)
+            
+            for (let file of files) {                       
+                console.log(`${file} - 1`)
 
-        for (let file of files) {                       
-            // console.log(`${file} - 1`)
+                if (path.extname(file) === '.css'){fileArr.push(file)}
+            }
+            resolve()
+        });  
+    })
+    // p.then(setTimeout(() => {() => console.log(fileArr)}, 1000))  
+    p.then(() => {   
+        const newFoo = (i) => { 
+            if (i === undefined){i = 0};   
 
-            if (path.extname(file) === '.css'){                
-                fs.readFile(`${SrcDir}/${file}`, 'utf-8', (err, content) => {
-                    if (err) {
+            fs.readFile(`${SrcDir}/${fileArr[i]}`, 'utf-8', (err, content) => {
+                if (err) {
+                    return console.log(err);
+                }
+                console.log(`${fileArr[i]} - 2`)
+
+                fs.appendFile(`${targetDir}/bundle.css`, `${content}\n\n`, (err) => {
+                    console.log(`${fileArr[i]} - 3`)
+                    if(err) {
                         return console.log(err);
                     }
-                    // console.log(`${file} - 2`)
-
-                    fs.appendFile(`${targetDir}/bundle.css`, `${content}\n\n`, (err) => {
-                        // console.log(`${file} - 3`)
-                        if(err) {
-                            return console.log(err);
-                        }                        
-                    }) 
-                })
-            // console.log('end')                                       
-            }     
-        }     
-    })           
+                    if (i < fileArr.length - 1) {                       
+                        i = ++i; 
+                        newFoo(i)
+                    }
+                }) 
+            })                                     
+        }
+        newFoo()
+    })              
+            
+           
 }, 1000)
