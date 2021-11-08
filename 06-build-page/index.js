@@ -33,10 +33,10 @@ setTimeout(() => {
             if (err) {
                 return console.log(err);
             }
-            console.log(files)
+            // console.log(files)
             
             for (let file of files) {                       
-                console.log(`${file} - 1`)
+                // console.log(`${file} - 1`)
 
                 if (path.extname(file) === '.css'){fileArr.push(file)}
             }
@@ -52,10 +52,10 @@ setTimeout(() => {
                 if (err) {
                     return console.log(err);
                 }
-                console.log(`${fileArr[i]} - 2`)
+                // console.log(`${fileArr[i]} - 2`)
 
                 fs.appendFile(`${targetDir}/stye.css`, `${content}\n\n`, (err) => {
-                    console.log(`${fileArr[i]} - 3`)
+                    // console.log(`${fileArr[i]} - 3`)
                     if(err) {
                         return console.log(err);
                     }
@@ -99,7 +99,8 @@ const dirReader = () => {
                 isIt.push(`${stats.isDirectory()}`);
 
 
-                if (i < fileArr.length - 1) {                                                                                  i = ++i; 
+                if (i < fileArr.length - 1) {                                                                                  
+                    i = ++i; 
                     CheckIfDirFoo(i)
                 }
                 
@@ -133,6 +134,10 @@ const dirReader = () => {
 }
 dirReader()
 
+
+
+
+
 setTimeout(() => {
     const newFoo = (i) => {
         if (i === undefined) {i = 0}
@@ -146,14 +151,75 @@ setTimeout(() => {
                 resolve()
             })
         })
-        p.then(() => {if (i < fileArr.length - 1){
-            i = ++i;
-            newFoo(i);
-        }})
+        p.then(() => {
+            if (i < fileArr.length - 1){
+                i = ++i;
+                newFoo(i);
+            }
+        })
     }
     newFoo(0);
-    
+    fs.promises.copyFile(`${path.join(__dirname, 'template.html')}`, `${path.join(__dirname, 'project-dist', 'index.html')}`);
 }, 1000)
+
+
+
+let contentArrFiles = [
+    `${path.join(__dirname, 'components', 'header.html')}`,
+    `${path.join(__dirname, 'components', 'articles.html')}`,
+    `${path.join(__dirname, 'components', 'footer.html')}`
+];
+let contentArr = [];
+
+const contentArrFoo = (i) => {
+    console.log('1')
+    const p = new Promise ((resolve, reject) => {
+        fs.readFile(contentArrFiles[i], 'utf-8', (err, content) => {
+            if (err) {
+                return console.log(err);
+            }
+            contentArr.push(content);
+        resolve()    
+        })    
+    })    
+    p.then(() => {
+        if (i < fileArr.length - 1){
+            i = ++i;
+            contentArrFoo(i);
+        }
+    }) 
+}
+contentArrFoo(0)
+
+setTimeout(() => {
+    replaceTargetArr = [
+        '{{header}}',
+        '{{articles}}',
+        '{{footer}}'
+    ];
+    const replaceFoo = (i) => {
+        console.log('2')
+        const p = new Promise ((resolve, reject) => {
+            fs.readFile(`${path.join(__dirname, 'project-dist', 'index.html')}`, 'utf-8', (err, content) => {
+                if (err) {
+                    return console.log(err);
+                }
+                const result = content.replace(`${replaceTargetArr[i]}`, contentArr[i])
+                fs.writeFile(`${path.join(__dirname, 'project-dist', 'index.html')}`, result, 'utf8', function (err) {
+                    if (err) return console.log(err);
+                    resolve()
+                });
+            })
+        })
+        p.then(() => {
+            if (i < fileArr.length - 1){
+                i = ++i;
+                replaceFoo(i);
+            }
+        }) 
+    }
+    replaceFoo(0);     
+}, 2000)
 
 
 
