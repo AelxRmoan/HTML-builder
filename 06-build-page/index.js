@@ -12,13 +12,19 @@ let SrcDir = `${path.join(__dirname, 'styles')}`;
 let fileArr = [];
 let isIt = [];
 
-
-fs.promises.rmdir(`${targetDir}`, {recursive: true});
+async () => {
+    try {
+        await fs.promises.mkdir(`${targetDir}`, {recursive: true});
+        fs.promises.mkdir(`${targetDirAssets}`, {recursive: true});
+    } catch {
+        await fs.rm(`${targetDir}`, {recursive: true});
+        await fs.promises.mkdir(`${targetDir}`, {recursive: true});
+        fs.promises.mkdir(`${targetDirAssets}`, {recursive: true});
+    }
+}
 
 setTimeout(function(){
-    fs.promises.mkdir(`${targetDir}`, {recursive: true});
-    fs.promises.mkdir(`${targetDirAssets}`, {recursive: true});
-
+    
 }, 1000)
 
 
@@ -172,7 +178,6 @@ let contentArrFiles = [
 let contentArr = [];
 
 const contentArrFoo = (i) => {
-    console.log('1')
     const p = new Promise ((resolve, reject) => {
         fs.readFile(contentArrFiles[i], 'utf-8', (err, content) => {
             if (err) {
@@ -198,7 +203,6 @@ setTimeout(() => {
         '{{footer}}'
     ];
     const replaceFoo = (i) => {
-        console.log('2')
         const p = new Promise ((resolve, reject) => {
             fs.readFile(`${path.join(__dirname, 'project-dist', 'index.html')}`, 'utf-8', (err, content) => {
                 if (err) {

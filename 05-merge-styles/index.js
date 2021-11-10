@@ -9,9 +9,14 @@ let SrcDir = `${path.join(__dirname, 'styles')}`;
 //         setTimeout(() => resolve(), ms)
 //     })
 // }
-
-
-fs.promises.rmdir(`${targetDir}/bundle.css`, {recursive: true});
+async () => {
+    try {
+        await fs.promises.mkdir(`${targetDir}/bundle.css`, {recursive: true});
+    } catch {
+        await fs.rm(`${targetDir}/bundle.css`, {recursive: true});
+        await fs.promises.mkdir(`${targetDir}/bundle.css`, {recursive: true});
+    }
+}
 
 setTimeout(() => {
     let fileArr = [];
@@ -42,6 +47,8 @@ setTimeout(() => {
                 }
                 // console.log(`${fileArr[i]} - 2`)
 
+                
+                
                 fs.appendFile(`${targetDir}/bundle.css`, `${content}\n\n`, (err) => {
                     // console.log(`${fileArr[i]} - 3`)
                     if(err) {

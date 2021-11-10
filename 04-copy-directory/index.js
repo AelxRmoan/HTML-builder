@@ -4,10 +4,19 @@ const fs = require('fs');
 let currDir = `${path.join(__dirname)}`;
 let currDirDir = `${path.join(__dirname, 'files')}`;
 
-fs.promises.rmdir(`${currDir}/files-copy`, {recursive: true});
+async () => {
+    try {
+        await fs.promises.mkdir(`${currDir}/files-copy`, {recursive: true});
+    } catch {
+        await fs.rm(`${currDir}/files-copy`, {recursive: true}); 
+        await fs.promises.mkdir(`${currDir}/files-copy`, {recursive: true});
+    }
+
+
+}
 
 setTimeout(function(){
-    fs.promises.mkdir(`${currDir}/files-copy`, {recursive: true});
+    
     
     fs.readdir(currDirDir, (err, files) => {
         files.forEach(file => {
