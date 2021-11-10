@@ -12,7 +12,7 @@ let SrcDir = `${path.join(__dirname, 'styles')}`;
 let fileArr = [];
 let isIt = [];
 
-async () => {
+async function mmm() {
     try {
         await fs.promises.mkdir(`${targetDir}`, {recursive: true});
         fs.promises.mkdir(`${targetDirAssets}`, {recursive: true});
@@ -22,12 +22,7 @@ async () => {
         fs.promises.mkdir(`${targetDirAssets}`, {recursive: true});
     }
 }
-
-setTimeout(function(){
-    
-}, 1000)
-
-
+mmm()
 
 
 
