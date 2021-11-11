@@ -5,18 +5,25 @@ let currDir = `${path.join(__dirname)}`;
 let currDirDir = `${path.join(__dirname, 'files')}`;
 let lll = `${path.join(currDir, 'files-copy')}`
 
+async function lllFoo() {
+    try {
+        await fs.rm(lll, {recursive: true}, (err) => { }); 
+        }
+    catch {
+    }
+}
+lllFoo()
 
 async function mmm() {
     try {
         await fs.promises.mkdir(lll, {recursive: true});
     } catch {
-        await fs.rm(lll, {recursive: true}); 
+        
         await fs.promises.mkdir(lll, {recursive: true});
     }
-
-
 }
-mmm()
+setTimeout(mmm,1000)
+
 
 setTimeout(function(){
     

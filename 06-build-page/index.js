@@ -3,7 +3,6 @@ const fs = require('fs');
 
 let rootCurrDir = `${path.join(__dirname, 'assets')}`;
 let currDir = `${path.join(__dirname, 'assets')}`;
-console.log(currDir)
 
 let targetDir = `${path.join(__dirname, 'project-dist')}`;
 let targetDirAssets = `${path.join(targetDir, 'assets')}`;
@@ -12,14 +11,39 @@ let SrcDir = `${path.join(__dirname, 'styles')}`;
 
 let fileArr = [];
 let isIt = [];
-async function mmm() {
+
+// async function exists (path) {  
+//   try {
+//     await Fs.access(path)
+//     return true
+//   } catch {
+//     return false
+//   }
+// }
+async function lll() {
     try {
+        fs.rm(`${targetDir}`, {recursive: true}, (err) => { console.log(err)});
+        }
+    catch {}
+}
+lll()
+
+async function mmm() {
+    
+
+    
+    try {
+        
         await fs.promises.mkdir(`${targetDir}`, {recursive: true});
         await fs.promises.mkdir(`${targetDirAssets}`, {recursive: true});
     } catch {
+        
         await fs.rm(`${targetDir}`, {recursive: true});
-        await setTimeout(() => {fs.promises.mkdir(`${targetDir}`, {recursive: true});}, 1000)
-        await setTimeout(() => {fs.promises.mkdir(`${targetDirAssets}`, {recursive: true});}, 1000)
+        
+        await fs.promises.mkdir(`${targetDir}`, {recursive: true});
+        
+        await fs.promises.mkdir(`${targetDirAssets}`, {recursive: true});
+        
     }
 }
 mmm()
