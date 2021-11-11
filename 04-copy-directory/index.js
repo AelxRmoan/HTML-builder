@@ -22,7 +22,7 @@ async function mmm() {
         await fs.promises.mkdir(lll, {recursive: true});
     }
 }
-setTimeout(mmm,1000)
+setTimeout(mmm, 900)
 
 
 setTimeout(function(){

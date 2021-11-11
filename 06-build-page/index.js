@@ -79,7 +79,7 @@ setTimeout(() => {
                 }
                 // console.log(`${fileArr[i]} - 2`)
 
-                fs.appendFile(`${targetDir}/stye.css`, `${content}\n\n`, (err) => {
+                fs.appendFile(`${targetDir}/style.css`, `${content}\n\n`, (err) => {
                     // console.log(`${fileArr[i]} - 3`)
                     if(err) {
                         return console.log(err);
